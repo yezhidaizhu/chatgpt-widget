@@ -2,6 +2,7 @@
 /*  */
 import { app, screen, BrowserWindow } from 'electron';
 import path from 'path';
+import { getDefaultLink, getStoreSetting, setStoreSetting } from './store';
 
 class MainWin {
   mainWindow: BrowserWindow | undefined;
@@ -10,9 +11,19 @@ class MainWin {
 
   screenHeight = 0;
 
-  windowWidth = 800;
+  windowWidth = 600;
 
   inervalTimer: any;
+
+  link = '';
+
+  isFixed = false;
+
+  constructor() {
+    const setting = getStoreSetting();
+    this.windowWidth = setting?.windowWidth;
+    this.link = getDefaultLink();
+  }
 
   createWin() {
     const { width: screenWidth, height: screenHeight } =
@@ -31,10 +42,11 @@ class MainWin {
       minHeight: screenHeight,
       maxWidth: 0.85 * screenWidth,
       minWidth: 400,
-      // skipTaskbar: true,
+      skipTaskbar: true,
       x: screenWidth,
       y: 0,
       show: false,
+      // resizable:false
     });
 
     this.mainWindow = mainWindow;
@@ -45,7 +57,7 @@ class MainWin {
     this.listener();
 
     // and load the index.html of the app.
-    mainWindow.loadURL('https://chat.zhile.io/');
+    mainWindow.loadURL(this.link);
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
@@ -89,11 +101,12 @@ class MainWin {
     });
 
     mainWindow?.on('blur', () => {
+      if (_this.isFixed) return;
       _this.hide();
     });
 
     // 禁止右边拖动
-    mainWindow.addListener(
+    mainWindow?.on(
       'will-resize',
       (
         event: { preventDefault: () => void },
@@ -102,13 +115,25 @@ class MainWin {
       ) => {
         if (details.edge === 'right') {
           event.preventDefault();
+        } else {
+          const { width } = mainWindow.getBounds();
+          setStoreSetting({ windowWidth: width });
         }
       }
     );
+
+    // 通知加载完成触发
+    mainWindow?.webContents.on('dom-ready', () => {
+      mainWindow?.webContents.send('main-win-dom-ready');
+    });
   }
 
   show() {
-    this.mainWindow?.show?.();
+    if (this.mainWindow?.isVisible()) {
+      this.mainWindow.hide();
+    } else {
+      this.mainWindow?.show?.();
+    }
   }
 
   close() {
@@ -130,7 +155,7 @@ class MainWin {
           _this.mainWindow?.setPosition(pos, 0);
         } else {
           _this.mainWindow?.setPosition(screenWidth, 0);
-          _this.mainWindow.hide();
+          _this.mainWindow?.hide();
           clearInterval(_this.inervalTimer);
         }
       }
@@ -140,11 +165,29 @@ class MainWin {
   }
 
   hide() {
-    this.mainWindow.setPosition(this.screenWidth, 0);
+    this.mainWindow?.setPosition(this.screenWidth, 0);
     setTimeout(() => {
-      this.mainWindow.hide();
+      this.mainWindow?.hide();
     }, 100);
+  }
+
+  reloadUrl(url: string) {
+    this.mainWindow?.reload();
+    this.mainWindow?.loadURL(url);
+  }
+
+  // 固定，并且置顶，esc 才能关闭
+  setFixed(fixed?: boolean) {
+    this.isFixed = fixed ?? !this.isFixed;
+    this.mainWindow?.setAlwaysOnTop(this.isFixed);
+  }
+
+  // 是否可以 resize
+  setEnableResize(resizable: boolean) {
+    this.mainWindow?.setResizable(resizable);
   }
 }
 
-export default MainWin;
+const mainWindow = new MainWin();
+
+export default mainWindow;

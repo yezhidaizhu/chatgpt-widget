@@ -1,0 +1,98 @@
+import jss, { JssStyle } from 'jss';
+import { ipcRenderer } from 'electron';
+
+import { createFaIcon, loadCss } from './utils';
+import { loadDefaultCss } from './defaultCss';
+
+// 界面右上角操作
+function loadOptions() {
+  console.log('options');
+
+  if (typeof window !== 'undefined') {
+    const presetDefault = require('jss-preset-default').default;
+    jss.setup(presetDefault());
+
+    loadDefaultCss();
+    loadCss(
+      'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
+    );
+  }
+
+  const { classes } = jss.createStyleSheet(styles as any).attach();
+  const optionsContainer = document.createElement('div');
+  optionsContainer.classList.add(classes.optionsContainer);
+
+  const defaultOptions = {
+    fixed: false,
+  };
+
+  // 固定钉
+  const tackIcon = createFaIcon([classes.optionsIcon, 'fa-thumb-tack']);
+  const optionsIconBox = document.createElement('div');
+  optionsIconBox.classList.add(classes.optionsIconBox);
+  optionsIconBox.append(tackIcon);
+  optionsIconBox.addEventListener('click', () => {
+    const fixed = !defaultOptions.fixed;
+    defaultOptions.fixed = fixed;
+    ipcRenderer.send('main-win-fixed', fixed);
+    if (fixed) {
+      optionsIconBox.classList.add(classes.fixed);
+    } else {
+      optionsIconBox.classList.remove(classes.fixed);
+    }
+  });
+
+  // 复制
+  const copyIcon = createFaIcon([classes.optionsIcon, 'fa-copy']);
+  const copyOptionsIconBox = document.createElement('div');
+  copyOptionsIconBox.classList.add(classes.optionsIconBox);
+  copyOptionsIconBox.append(copyIcon);
+  copyOptionsIconBox.addEventListener('click', () => {});
+
+  optionsContainer.appendChild(copyOptionsIconBox);
+  optionsContainer.appendChild(optionsIconBox);
+  window.document.body.append(optionsContainer);
+}
+
+export default loadOptions;
+
+const styles: JssStyle = {
+  optionsContainer: {
+    position: 'fixed',
+    top: '0',
+    right: '0',
+    margin: '8px 8px',
+    'z-index': 99999,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 16,
+    fontSize: 14,
+    color: '#fff',
+    transition: 'all 0.2s',
+  },
+  optionsIconBox: {
+    '&:hover': {
+      opacity: 1,
+    },
+    opacity: 0.2,
+    width: 24,
+    height: 24,
+    borderRadius: 4,
+    background: '#111',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+  },
+  optionsIcon: {
+    '&:hover': {
+      transition: 'all 0.2s',
+    },
+    color: '#fff',
+  },
+  fixed: {
+    opacity: 1,
+    background: '#0066ff',
+  },
+};

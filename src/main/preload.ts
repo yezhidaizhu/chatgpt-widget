@@ -1,7 +1,7 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import Mousetrap from 'mousetrap';
+import loadOptions from './preload/options';
 
 export type Channels = 'ipc-example';
 
@@ -29,7 +29,23 @@ contextBridge.exposeInMainWorld('electron', electronHandler);
 
 export type ElectronHandler = typeof electronHandler;
 
-Mousetrap.bind('esc', () => {
-  console.log('esc');
-  ipcRenderer.send('close-main-win');
+ipcRenderer.once('main-win-dom-ready', () => {
+  loadOptions();
+
+  let enableResize = true;
+  const sendEnableResize = (enable: boolean) =>
+    ipcRenderer.send('main-win-enable-resize', enable);
+
+  // 鼠标在右边不能 resize
+  document.body.addEventListener('mousemove', (event) => {
+    const { clientX } = event;
+
+    if (document.body.clientWidth - clientX < 16) {
+      enableResize = false;
+      sendEnableResize(false);
+    } else if (!enableResize) {
+      enableResize = true;
+      sendEnableResize(true);
+    }
+  });
 });

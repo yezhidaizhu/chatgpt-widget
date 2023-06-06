@@ -13,8 +13,12 @@ module.exports = {
     '@typescript-eslint/no-shadow': 'error',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
-    'prettier/prettier': "off",
-    'no-underscore-dangle': "off"
+    'prettier/prettier': 'off',
+    'no-underscore-dangle': 'off',
+    'no-use-before-define': 'off',
+    'import/prefer-default-export': 'off',
+    'global-require': 'off',
+    camelcase: 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

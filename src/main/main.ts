@@ -8,8 +8,10 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
+import electronLocalshortcut from 'electron-localshortcut';
 import { app, ipcMain, globalShortcut } from 'electron';
-import MainWin from './mainWin';
+import mainWindow from './mainWin';
+import createTray from './tray';
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -22,19 +24,27 @@ const isDebug =
 if (isDebug) {
   require('electron-debug')();
 }
-const mainWindow = new MainWin();
 
 const createWindow = async () => {
+  createTray();
+
   mainWindow.createWin();
 
+  electronLocalshortcut.register(mainWindow.mainWindow, 'Esc', () => {
+    mainWindow.animaHide();
+  });
+
   globalShortcut.register('super+ctrl+b', () => {
-    console.log('CommandOrControl+X is pressed');
     mainWindow.show();
   });
 };
 
-ipcMain.on('close-main-win', () => {
-  mainWindow.animaHide();
+ipcMain.on('main-win-fixed', (ev, fixed) => {
+  mainWindow.setFixed(fixed);
+});
+
+ipcMain.on('main-win-enable-resize', (ev, resizable) => {
+  mainWindow.setEnableResize(resizable);
 });
 
 /**
