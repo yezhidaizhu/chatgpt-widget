@@ -3,6 +3,10 @@ import { ipcRenderer } from 'electron';
 
 import { createFaIcon, loadCss } from './utils';
 import { loadDefaultCss } from './defaultCss';
+import Toastify from 'toastify';
+import copy from 'copy-text-to-clipboard';
+
+Toastify.setOption('delay', 500);
 
 // 界面右上角操作
 function loadOptions() {
@@ -47,7 +51,11 @@ function loadOptions() {
   const copyOptionsIconBox = document.createElement('div');
   copyOptionsIconBox.classList.add(classes.optionsIconBox);
   copyOptionsIconBox.append(copyIcon);
-  copyOptionsIconBox.addEventListener('click', () => {});
+  copyOptionsIconBox.addEventListener('click', () => {
+    // eslint-disable-next-line no-restricted-globals
+    copy(location.href);
+    Toastify.info('已复制当前地址');
+  });
 
   optionsContainer.appendChild(copyOptionsIconBox);
   optionsContainer.appendChild(optionsIconBox);
