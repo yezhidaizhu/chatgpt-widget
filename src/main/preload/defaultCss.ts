@@ -24,14 +24,14 @@ const scrollbarStyleStr = `
     -webkit-border-radius: 0; /*滚动条的圆角宽度*/
 }
 ::-webkit-scrollbar {
-    width: 12px; /*滚动条的宽度*/
+    width: 10px; /*滚动条的宽度*/
     height: 8px; /*滚动条的高度*/
 }
 ::-webkit-scrollbar-thumb:vertical { /*垂直滚动条的样式*/
     -webkit-border-radius: 4px;
-    outline: 2px solid #fff;
+    outline: 2px solid #eee;
     outline-offset: -2px;
-    border: 2px solid #fff;
+    border: 2px solid #eee;
 }
 ::-webkit-scrollbar-thumb:hover { /*滚动条的hover样式*/
     -webkit-border-radius: 4px;

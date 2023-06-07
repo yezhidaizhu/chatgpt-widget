@@ -178,9 +178,10 @@ class MainWin {
     }, 100);
   }
 
-  reloadUrl(url: string) {
+  reloadUrl(url?: string) {
     this.mainWindow?.reload();
-    this.mainWindow?.loadURL(url);
+    // eslint-disable-next-line no-unused-expressions
+    url && this.mainWindow?.loadURL(url);
   }
 
   // 固定，并且置顶，esc 才能关闭

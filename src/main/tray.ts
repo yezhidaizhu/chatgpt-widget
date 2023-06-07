@@ -10,7 +10,7 @@ let tray: Tray | undefined;
 
 export default function createTray() {
   tray = new Tray(iconTray);
-  const reloadUrl = (url: string) => {
+  const reloadUrl = (url?: string) => {
     mainWindow.reloadUrl(url);
     setDefaultLink(url);
   };
