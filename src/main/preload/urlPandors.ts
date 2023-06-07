@@ -5,10 +5,10 @@ export default function loadPandors() {
   if (!window.location.href.startsWith('https://chat.zhile.io')) return;
 
   // 解决登陆时的 prompt 弹出输入 token 的问题
-  window.addEventListener('load', () => {
-    if (!window.location.href.startsWith('https://chat.zhile.io/auth')) return;
-
+  if (window.location.href.startsWith('https://chat.zhile.io/auth')) {
     const submitBtn = document.querySelector('#submit-token');
+    console.log(`%c resolve prompt: ${!!submitBtn}`, 'color: #a3e635');
+
     submitBtn?.addEventListener('click', async () => {
       const accessToken = await JSAlert.prompt('Please input access token:');
       if (accessToken) {
@@ -34,25 +34,25 @@ export default function loadPandors() {
           .catch((error) => console.error(error));
       }
     });
-  });
+  } else {
+    let timer: any;
+    let count = 0;
+    // eslint-disable-next-line prefer-const
+    timer = setInterval(() => {
+      const hasBtn = addEnterListener();
+      console.log('%c wait submit btn dom ...', 'color: #fbbf24');
 
-  let timer: any;
-  let count = 0;
-  // eslint-disable-next-line prefer-const
-  timer = setInterval(() => {
-    const hasBtn = addEnterListener();
-    console.log('wait btn dom ...');
-
-    if (hasBtn) {
-      console.log('start listener enter key');
-      clearInterval(timer);
-    }
-    count += 1;
-    // 超过一定的次数，关闭
-    if (count > 20) {
-      clearInterval(timer);
-    }
-  }, 800);
+      if (hasBtn) {
+        console.log('%c start listener enter key', 'color: #a3e635');
+        clearInterval(timer);
+      }
+      count += 1;
+      // 超过一定的次数，关闭
+      if (count > 20) {
+        clearInterval(timer);
+      }
+    }, 800);
+  }
 
   // 解决宽度小的情况下，回车不能发送问题
   function addEnterListener() {
