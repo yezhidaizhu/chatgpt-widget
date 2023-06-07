@@ -60,7 +60,9 @@ class MainWin {
     mainWindow.loadURL(this.link);
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    if (process.env.NODE_ENV === 'development') {
+      mainWindow.webContents.openDevTools();
+    }
   }
 
   listener() {
@@ -185,6 +187,11 @@ class MainWin {
   // 是否可以 resize
   setEnableResize(resizable: boolean) {
     this.mainWindow?.setResizable(resizable);
+  }
+
+  // 打开开发者工具
+  toggleDevTools() {
+    this.mainWindow?.webContents.openDevTools();
   }
 }
 

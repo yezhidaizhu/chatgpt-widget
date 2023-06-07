@@ -1,4 +1,4 @@
-import { Menu, Tray } from 'electron';
+import { Menu, Tray, app } from 'electron';
 import mainWindow from './mainWin';
 import { getDefaultLink, getLinkOptons, setDefaultLink } from './store';
 import { getAssetPath } from './util';
@@ -25,6 +25,30 @@ export default function createTray() {
 
   const contextMenu = Menu.buildFromTemplate([
     ...links,
+    { type: 'separator' },
+    {
+      label: '设置',
+      submenu: [
+        {
+          label: '开机启动',
+          type: 'checkbox',
+          click: (ev) => {
+            app.setLoginItemSettings({
+              openAtLogin: ev.checked,
+            });
+          },
+        },
+        { type: 'separator' },
+        {
+          label: '开发者工具',
+          role: 'toggleDevTools',
+          click: () => {
+            mainWindow?.toggleDevTools();
+          },
+        },
+      ],
+    },
+
     { type: 'separator' },
     { label: '退出', role: 'quit' },
   ]);
