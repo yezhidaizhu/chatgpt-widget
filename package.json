@@ -1,5 +1,5 @@
 {
-  "description": "quick search",
+  "description": "可能为智障搜索",
   "keywords": [
     "electron",
     "boilerplate",
@@ -170,7 +170,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "kSearch",
+    "productName": "阿智",
     "appId": "org.erb.kSearch",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",

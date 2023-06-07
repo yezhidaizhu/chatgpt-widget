@@ -58,5 +58,5 @@ export default function createTray() {
     mainWindow.show();
   });
 
-  tray.setToolTip('kSearch\n快捷键: Ctrl+Win+b');
+  tray.setToolTip('阿智\n快捷键: Ctrl+Win+b');
 }
