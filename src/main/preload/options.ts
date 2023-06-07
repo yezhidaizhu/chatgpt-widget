@@ -1,10 +1,10 @@
 import jss, { JssStyle } from 'jss';
 import { ipcRenderer } from 'electron';
+import Toastify from 'toastify';
+import copy from 'copy-text-to-clipboard';
 
 import { createFaIcon, loadCss } from './utils';
 import { loadDefaultCss } from './defaultCss';
-import Toastify from 'toastify';
-import copy from 'copy-text-to-clipboard';
 
 Toastify.setOption('delay', 500);
 

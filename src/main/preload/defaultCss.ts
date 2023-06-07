@@ -8,7 +8,11 @@ export function loadDefaultCss() {
   // 滚动条
   loadCssStr(scrollbarStyleStr);
 
+  // toast
   loadCssStr(toastifyStyleStr);
+
+  // 文字选择问题
+  loadCssStr(userSelectStyleStr);
 }
 
 const scrollbarStyleStr = `
@@ -87,4 +91,10 @@ const toastifyStyleStr = `
       right: 10px;
       cursor: pointer; }
   
+`;
+
+const userSelectStyleStr = `
+    *{
+      user-select: text;
+    }
 `;

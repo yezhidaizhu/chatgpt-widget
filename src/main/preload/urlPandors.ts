@@ -1,5 +1,4 @@
 import JSAlert from 'js-alert';
-import Mousetrap from 'mousetrap';
 
 // pandors 链接下
 export default function loadPandors() {

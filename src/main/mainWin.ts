@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /*  */
-import { app, screen, BrowserWindow } from 'electron';
+import { app, screen, BrowserWindow, Menu } from 'electron';
 import path from 'path';
 import { getDefaultLink, getStoreSetting, setStoreSetting } from './store';
 

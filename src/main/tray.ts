@@ -57,4 +57,6 @@ export default function createTray() {
   tray.on('click', () => {
     mainWindow.show();
   });
+
+  tray.setToolTip('kSearch\n快捷键: Ctrl+Win+b');
 }

@@ -25,7 +25,12 @@ if (isDebug) {
   require('electron-debug')();
 }
 
+// 只能运行一次
+const gotTheLock = app.requestSingleInstanceLock();
+
 const createWindow = async () => {
+  if (!gotTheLock) return;
+
   createTray();
 
   mainWindow.createWin();
