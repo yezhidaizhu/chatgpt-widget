@@ -171,7 +171,7 @@
   },
   "build": {
     "productName": "阿智",
-    "appId": "org.erb.kSearch",
+    "appId": "org.erb.azhi",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
