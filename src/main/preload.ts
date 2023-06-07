@@ -2,6 +2,7 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import loadOptions from './preload/options';
+import loadPandors from './preload/urlPandors';
 
 export type Channels = 'ipc-example';
 
@@ -29,14 +30,22 @@ contextBridge.exposeInMainWorld('electron', electronHandler);
 
 export type ElectronHandler = typeof electronHandler;
 
-ipcRenderer.once('main-win-dom-ready', () => {
-  loadOptions();
+const mainWindowStatus = {};
+ipcRenderer.send('main-win-status');
+ipcRenderer.on('main-win-status-reply', (ev, status) => {
+  if (status) {
+    Object.assign(mainWindowStatus, status);
+  }
+});
 
+ipcRenderer.once('main-win-dom-ready', () => {
+  loadOptions({ mainWindowStatus });
+
+  // 鼠标在右边不能 resize
   let enableResize = true;
   const sendEnableResize = (enable: boolean) =>
     ipcRenderer.send('main-win-enable-resize', enable);
 
-  // 鼠标在右边不能 resize
   document.body.addEventListener('mousemove', (event) => {
     const { clientX } = event;
 
@@ -48,4 +57,8 @@ ipcRenderer.once('main-win-dom-ready', () => {
       sendEnableResize(true);
     }
   });
+});
+
+ipcRenderer.once('main-win-did-finish-load', () => {
+  loadPandors();
 });

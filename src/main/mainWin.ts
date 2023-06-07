@@ -124,9 +124,14 @@ class MainWin {
       }
     );
 
-    // 通知加载完成触发
+    // 通知dom-ready完成触发
     mainWindow?.webContents.on('dom-ready', () => {
       mainWindow?.webContents.send('main-win-dom-ready');
+    });
+
+    // 通知加载完成触发
+    mainWindow?.webContents.on('did-finish-load', () => {
+      mainWindow?.webContents.send('main-win-did-finish-load');
     });
   }
 

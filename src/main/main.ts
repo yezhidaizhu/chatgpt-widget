@@ -43,6 +43,13 @@ ipcMain.on('main-win-fixed', (ev, fixed) => {
   mainWindow.setFixed(fixed);
 });
 
+// 查询 mainwin 状态
+ipcMain.on('main-win-status', (ev) => {
+  ev.reply('main-win-status-reply', {
+    isFixed: mainWindow.isFixed,
+  });
+});
+
 ipcMain.on('main-win-enable-resize', (ev, resizable) => {
   mainWindow.setEnableResize(resizable);
 });

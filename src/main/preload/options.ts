@@ -9,8 +9,11 @@ import copy from 'copy-text-to-clipboard';
 Toastify.setOption('delay', 500);
 
 // 界面右上角操作
-function loadOptions() {
-  console.log('options');
+function loadOptions({ mainWindowStatus = {} }: { [key: string]: any }) {
+  console.log('load options');
+  const defaultOptions = {
+    fixed: mainWindowStatus?.isFixed,
+  };
 
   if (typeof window !== 'undefined') {
     const presetDefault = require('jss-preset-default').default;
@@ -26,14 +29,11 @@ function loadOptions() {
   const optionsContainer = document.createElement('div');
   optionsContainer.classList.add(classes.optionsContainer);
 
-  const defaultOptions = {
-    fixed: false,
-  };
-
   // 固定钉
   const tackIcon = createFaIcon([classes.optionsIcon, 'fa-thumb-tack']);
   const optionsIconBox = document.createElement('div');
   optionsIconBox.classList.add(classes.optionsIconBox);
+  if (defaultOptions.fixed) optionsIconBox.classList.add(classes.fixed);
   optionsIconBox.append(tackIcon);
   optionsIconBox.addEventListener('click', () => {
     const fixed = !defaultOptions.fixed;
