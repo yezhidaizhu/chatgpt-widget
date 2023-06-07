@@ -129,7 +129,7 @@ class MainWin {
       mainWindow?.webContents.send('main-win-dom-ready');
     });
 
-    // 通知加载完成触发
+    // 通知加载完成触发 did-finish-load
     mainWindow?.webContents.on('did-finish-load', () => {
       mainWindow?.webContents.send('main-win-did-finish-load');
     });
