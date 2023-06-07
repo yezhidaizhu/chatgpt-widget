@@ -28,6 +28,11 @@ if (isDebug) {
 // 只能运行一次
 const gotTheLock = app.requestSingleInstanceLock();
 
+// 程序第二次启动，触发show
+app.on('second-instance', () => {
+  mainWindow?.show();
+});
+
 const createWindow = async () => {
   if (!gotTheLock) return;
 
